@@ -1,7 +1,24 @@
 #include "pentamino.h"
+
+/**
+ * @file Globals.cpp
+ * @brief Пространство имен глобальных переменных
+ * @namespace global
+ */
+
+/**
+ * @brief Описание глобальных переменных
+ * @namespace global
+ * @param Width максимальная ширина поля
+ * @param Height максимальная длина поля
+ * @param Solution количество решений
+ * @param Pole начальное поле типа std::vector<std::vector<int>>
+ * @param FILE_SAVE_s выходной файл, куда сохраняется результат работы программы
+ * @param Shapes[12] 12 фигур со всевозможными их вариациями
+ */
 namespace global {
     int Width, Height, Solution = 0;
-    int Pole[62][62];
+    std::vector<std::vector<int>> Pole;
     std::ofstream FILE_SAVE_s;
 
     Shape Shapes[12] =

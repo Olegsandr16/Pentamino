@@ -1,7 +1,14 @@
 #include "pentamino.h"
 using namespace global;
 
+/**
+ * @file main.cpp
+ * @brief Начальный файл
+ * @namespace global
+ * @author Yushchenko ALexander 2354
+ */
 
+///@brief считывает имена входного и выходного файлов и запускает функцию Start
 int main(int argc, char *argv[]) {
 
     std::string input_file;
