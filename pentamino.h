@@ -15,6 +15,8 @@
  * @param x координата по x
  * @param y координата по y
  */
+
+
 typedef struct TPoint {
     int x;
     int y;
@@ -50,30 +52,26 @@ struct Shape {
 };
 
 /**
- * @brief Описание глобальных переменных
- * @namespace global
- * @param Width максимальная ширина поля
- * @param Height максимальная длина поля
- * @param Solution количество решений
- * @param Pole начальное поле типа std::vector<std::vector<int>>
- * @param FILE_SAVE_s выходной файл, куда сохраняется результат работы программы
- * @param Shapes[12] 12 фигур со всевозможными их вариациями
+ * @brief Класс, описывающий переменные, использующиеся как глобальные
+ * @param height максимальная ширина поля
+ * @param width максимальная длина поля
+ * @param solution количество решений
+ * @param pole игровое поле
+ * @param output_file выходной файл, куда сохраняется результат работы программы
+ * @param shapes[12] 12 фигур со всевозможными их вариациями
  */
-namespace global {
-    extern int Width, Height, Solution;
-    extern std::vector<std::vector<int>> Pole;
-    extern std::ofstream FILE_SAVE_s;
-    extern Shape Shapes[12];
-}
-/**
- * @brief Функция поиска решений
- * @param i индекс данной фигуры
- */
-void FindSolutions(int i);
+class Variables{
+public:
+    static int width, height, solution;
+    static std::vector<std::vector<int>> pole;
+    static std::ofstream output_file;
+    static Shape shapes[12];
+
+};
 
 /**
  * @brief Функция начала логической части программы
  * @param output_file имя выходного файла
  * @param input_file имя входного файла
  */
-void Start(std::string output_file, std::string input_file);
+void start(std::string output_file, std::string input_file);

@@ -1,5 +1,4 @@
 #include "pentamino.h"
-using namespace global;
 
 /**
  * @file main.cpp
@@ -21,7 +20,7 @@ int main(int argc, char *argv[]) {
         input_file = "../input.txt";
         output_file = "../output.txt";
     }
-    Start(output_file, input_file);
+    start(output_file, input_file);
 
     return 0;
 }

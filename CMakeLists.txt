@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(Course_work main.cpp
         pentamino.cpp
         pentamino.h
-        Globals.cpp
+        shapes.cpp
 )
