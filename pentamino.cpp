@@ -119,30 +119,34 @@ void FindSolutions(int i) {
         if (checkFigure(Shapes[i])){
             i++;
         }
+
+        //!поиск пустой клетки на поле куда можно поставить текущую фигуру
         pt = SearchEmpty1(Pole, pt, TPoint(Width, Height), 0);
 
         if (pt.y == Height) {
             break;
         }
 
+        //! пока не попробовали все повороты и отражения
         while (Shapes[i].count != j) {
             TPoint f = SearchEmpty(Shapes[i].Pieces[j].Arr, TPoint(0, 0), TPoint(5, 5), i + 1);
 
-            if (pt.x - f.x >= 0 && (pt.x - f.x) + Shapes[i].Pieces[j].LenX <= Width &&
-                pt.y + Shapes[i].Pieces[j].LenY <= Height) {
+            if (pt.x - f.x >= 0 && (pt.x - f.x) + Shapes[i].Pieces[j].LenX <= Width && pt.y + Shapes[i].Pieces[j].LenY <= Height) {
+                //! вставка, если входит в границы
                 bool s = true;
 
+                //! проверим можно ли вставить фигуру в поле
                 for (int y = 0; y < Shapes[i].Pieces[j].LenY; y++) {
                     for (int x = 0; x < Shapes[i].Pieces[j].LenX; x++) {
                         if (Shapes[i].Pieces[j].Arr[y][x] == i + 1)
                             if (Pole[pt.y + y][pt.x - f.x + x] != 0) {
                                 s = false;
-                                x = Shapes[i].Pieces[j].LenX; //������� �� ������
+                                x = Shapes[i].Pieces[j].LenX;
                                 y = Shapes[i].Pieces[j].LenY;
                             }
                     }
                 }
-
+                //! вставляем фигуру в поле
                 if (s) {
                     for (int y = 0; y < Shapes[i].Pieces[j].LenY; y++) {
                         for (int x = 0; x < Shapes[i].Pieces[j].LenX; x++) {
@@ -150,18 +154,20 @@ void FindSolutions(int i) {
 
                         }
                     }
-
+                    //! находим начальную точку для проверки на зажатость
                     int y1 = pt.y - 1;
                     int x1 = pt.x - f.x - 1;
 
+                    //! коррекция, чтобы не вылезть за диапазон
                     if (y1 < 0) y1 = 0;
                     if (x1 < 0) x1 = 0;
 
+                    //!проверка зажатой клетки
                     for (int y = y1; y < y1 + Shapes[i].Pieces[j].LenY + 2; y++) {
                         for (int x = x1; x < x1 + Shapes[i].Pieces[j].LenX + 2; x++) {
                             if (Pole[y][x] == 0) {
                                 if (CountEmpty(y, x, 0) < 5)
-                                {
+                                {//! нашли место, которое нельзя уже ни чем заставить
                                     s = false;
                                     x = Width;
                                     y = Height;
@@ -171,12 +177,14 @@ void FindSolutions(int i) {
                     }
 
                     if (s) {
+                        //! если не все фигуры просмотрены, то продолжить искать
                         if (i < 11) {
                             FindSolutions(i + 1);
                             delete_Figure(i, j, pt, f);
                             j++;
 
                         } else {
+                            //! проверка матрицы на заполнение
                             TPoint pr = pt;
                             pt = SearchEmpty1(Pole, TPoint(0, 0), TPoint(Width, Height), 0);
 
@@ -184,6 +192,7 @@ void FindSolutions(int i) {
                                 Solution++;
                                 FILE_SAVE_s << "Решение : " << Solution << "\r\n";
 
+                                //! вывод поля и запись в файл
                                 for (int y = 0; y < Height; y++) {
                                     for (int x = 0; x < Width; x++) {
                                         char c = (char) (Pole[y][x] + 0x30);
