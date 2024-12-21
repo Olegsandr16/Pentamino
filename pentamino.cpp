@@ -1,6 +1,7 @@
 #include "pentamino.h"
 
 using namespace global;
+
 TPoint SearchEmpty1(int Arr[62][62], TPoint st, TPoint end, int d) {
     for (; st.y < end.y; st.y++) {
         for (; st.x < end.x; st.x++) {
@@ -26,29 +27,29 @@ TPoint SearchEmpty(int Arr[5][5], TPoint st, TPoint end, int d) {
 }
 
 int CountEmpty(int y, int x, int Count) {
-    if ((y < 0) || (x < 0)) return Count - 1;      //если вышли за диапазон, то выходим
-    if (Pole[y][x] == 0)                       //если клетка пустая
+    if ((y < 0) || (x < 0)) return Count - 1;
+    if (Pole[y][x] == 0)
     {
-        if (Count == 4) return 5;                  //уже нашли 4-е, значит это пятая и выходим
+        if (Count == 4) return 5;
 
-        Pole[y][x] = 20;                          //указываем, что эту клетку сосчитали
+        Pole[y][x] = 20;
 
-        Count = CountEmpty(y, x + 1, Count + 1);   //переходим на соседнюю
-        if (Count < 5)                             //если не нашли пять, то ищем дальше
+        Count = CountEmpty(y, x + 1, Count + 1);
+        if (Count < 5)
         {
-            Count = CountEmpty(y + 1, x, Count + 1);      //переходим на соседнюю
-            if (Count < 5)                                //если не нашли пять, то ищем дальше
+            Count = CountEmpty(y + 1, x, Count + 1);
+            if (Count < 5)
             {
-                Count = CountEmpty(y, x - 1, Count + 1);     //переходим на соседнюю
-                if (Count < 5)                               //если не нашли пять, то ищем дальше
+                Count = CountEmpty(y, x - 1, Count + 1);
+                if (Count < 5)
                 {
-                    Count = CountEmpty(y - 1, x, Count + 1);   //переходим на соседнюю
+                    Count = CountEmpty(y - 1, x, Count + 1);
                 }
             }
         }
-        Pole[y][x] = 0; //на выходе удаляем признак подсчета клетки
+        Pole[y][x] = 0;
     } else return Count - 1;
-    return Count; //выходим с найденным количеством
+    return Count;
 }
 
 void delete_Figure(int i, int j, TPoint pt, TPoint f) {
@@ -60,8 +61,8 @@ void delete_Figure(int i, int j, TPoint pt, TPoint f) {
 }
 
 bool checkFigure(Shape shape){
-    for (int y = 0; y < M; y++) {
-        for (int x = 0; x < N; x++) {
+    for (int y = 0; y < Height; y++) {
+        for (int x = 0; x < Width; x++) {
             if (Pole[y][x] == shape.num){
                 return true;
             }
@@ -70,34 +71,26 @@ bool checkFigure(Shape shape){
     return false;
 }
 
-//основная функция поиска решения
 void FindSolutions(int i) {
     TPoint pt(0, 0);
-    int j = 0; // номер формы
+    int j = 0;
     while (true) {
         if (checkFigure(Shapes[i])){
             i++;
         }
-        //поиск пустой клетки на поле куда можно поставить текущую фигуру
-        pt = SearchEmpty1(Pole, pt, TPoint(N, M), 0);
+        pt = SearchEmpty1(Pole, pt, TPoint(Width, Height), 0);
 
-        // выход из цикла при выходе из диапазона
-        if (pt.y == M) {
+        if (pt.y == Height) {
             break;
         }
 
-        // пока не попробовали все повороты и отражения
         while (Shapes[i].count != j) {
-            //поиск первой непустой клетки в фигуре по горизонтали
             TPoint f = SearchEmpty(Shapes[i].Pieces[j].Arr, TPoint(0, 0), TPoint(5, 5), i + 1);
 
-            //пробуем вставлять, если выполняются условия, перебирая формы фигуры
-            if (pt.x - f.x >= 0 && (pt.x - f.x) + Shapes[i].Pieces[j].LenX <= N &&
-                pt.y + Shapes[i].Pieces[j].LenY <= M) {
-                //вставка, если входит в границы
+            if (pt.x - f.x >= 0 && (pt.x - f.x) + Shapes[i].Pieces[j].LenX <= Width &&
+                pt.y + Shapes[i].Pieces[j].LenY <= Height) {
                 bool s = true;
 
-                //проверим можно ли вставить
                 for (int y = 0; y < Shapes[i].Pieces[j].LenY; y++) {
                     for (int x = 0; x < Shapes[i].Pieces[j].LenX; x++) {
                         if (Shapes[i].Pieces[j].Arr[y][x] == i + 1)
@@ -130,36 +123,32 @@ void FindSolutions(int i) {
                     for (int y = y1; y < y1 + Shapes[i].Pieces[j].LenY + 2; y++) {
                         for (int x = x1; x < x1 + Shapes[i].Pieces[j].LenX + 2; x++) {
                             if (Pole[y][x] == 0) {
-                                if (CountEmpty(y, x, 0) < 5) //если соседних клеток меньше 5-и, то
+                                if (CountEmpty(y, x, 0) < 5)
                                 {
                                     s = false;
-                                    x = N; //выходим из цикла, так как нашли место, которое нельзя уже ни чем заставить
-                                    y = M;
+                                    x = Width;
+                                    y = Height;
                                 }
                             }
                         }
                     }
 
-                    if (s) { // если клетка не зажата
-                        //если не все фигуры просмотрены, то продолжить искать
+                    if (s) {
                         if (i < 11) {
                             FindSolutions(i + 1);
-                            //удаление фигуры
                             delete_Figure(i, j, pt, f);
                             j++;
 
                         } else {
-                            //проверка матрицы на заполнение
                             TPoint pr = pt;
-                            pt = SearchEmpty1(Pole, TPoint(0, 0), TPoint(N, M), 0);
+                            pt = SearchEmpty1(Pole, TPoint(0, 0), TPoint(Width, Height), 0);
 
-                            if (pt.x == 0 && pt.y == M) {
+                            if (pt.x == 0 && pt.y == Height) {
                                 Solution++;
                                 FILE_SAVE_s << " Решение : " << Solution << "\r\n";
 
-                                //запись в файл
-                                for (int y = 0; y < M; y++) {
-                                    for (int x = 0; x < N; x++) {
+                                for (int y = 0; y < Height; y++) {
+                                    for (int x = 0; x < Width; x++) {
                                         char c = (char) (Pole[y][x] + 0x30);
                                         if (Pole[y][x] < 0) c = ' ';
                                         if (Pole[y][x] > 9)
@@ -171,30 +160,28 @@ void FindSolutions(int i) {
                             }
                             pt = pr;
 
-                            //удаление фигуры
                             delete_Figure(i, j, pt, f);
                             j++;
 
                         }
                     } else {
-                        //удаление фигуры
                         delete_Figure(i, j, pt, f);
                         j++;
                     }
-                }//если не вставили
-                else { j++; }
-            }//если выходит за границы
-            else { j++; }
-        }//end while
+                }
+                else j++;
+            }
+            else j++;
+        }
 
         j = 0;
 
         // иначе сдвигаем на 1
         pt.x++;
-        if (pt.x == N) {
+        if (pt.x == Width) {
             pt.x = 0;
             pt.y++;
-            if (pt.y >= M) {
+            if (pt.y >= Height) {
                 break;
             }
         }
@@ -214,8 +201,8 @@ void Start(std::string output_file, std::string input_file){
         }
 
         int k, l = 0, col = 0;
-        M = 0;
-        N = 0;
+        Height = 0;
+        Width = 0;
 
         while (!feof(f)) {
             fgets(s, MAXLEN, f);
@@ -226,7 +213,7 @@ void Start(std::string output_file, std::string input_file){
                 else if (s[k] > 'a' && s[k] <= 'c') Pole[l][k] = s[k] - 87;
                 else if (s[k] != ' '){std::cout << "Wrong input data" << std::endl; return;}
                 (s[k] != ' ') ? col++ : col;
-                if (k > N) N = k;
+                if (k > Width) Width = k;
 
                 k++;
             }
@@ -234,8 +221,8 @@ void Start(std::string output_file, std::string input_file){
         }
         fclose(f);
 
-        N++;
-        M = l;
+        Width++;
+        Height = l;
 
         if (col == 60) {
             std::cout << "Finding solutions . . .\n";

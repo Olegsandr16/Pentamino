@@ -1,6 +1,6 @@
 #include "pentamino.h"
 namespace global {
-    int M, N, Solution = 0;
+    int Width, Height, Solution = 0;
     int Pole[62][62];
     std::ofstream FILE_SAVE_s;
 

@@ -27,7 +27,7 @@ struct Shape {
 };
 
 namespace global {
-    extern int N, M, Solution;
+    extern int Width, Height, Solution;
     extern int Pole[62][62];
     extern std::ofstream FILE_SAVE_s;
     extern Shape Shapes[12];

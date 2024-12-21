@@ -1,7 +1,6 @@
 #include "pentamino.h"
 using namespace global;
 
-// указывать обязательную позицию для 1 фигуры
 
 int main(int argc, char *argv[]) {
 
