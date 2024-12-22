@@ -3,7 +3,6 @@
 /**
  * @file main.cpp
  * @brief Начальный файл
- * @namespace global
  * @author Yushchenko ALexander 2354
  */
 

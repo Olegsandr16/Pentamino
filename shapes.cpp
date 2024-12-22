@@ -1,4 +1,11 @@
 #include "pentamino.h"
+
+/**
+ * @file pentamino.h
+ * @brief Файл с инициализацией переменных
+ */
+
+
 int Variables::solution = 0;
 int Variables::width;
 int Variables::height;
