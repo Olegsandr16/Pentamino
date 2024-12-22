@@ -19,7 +19,9 @@ int main(int argc, char *argv[]) {
         input_file = "../input.txt";
         output_file = "../output.txt";
     }
+//    if
     start(output_file, input_file);
+
 
     return 0;
 }

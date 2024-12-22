@@ -1,3 +1,4 @@
+#include <filesystem>
 #include "pentamino.h"
 
 
@@ -241,7 +242,8 @@ void start(std::string output_file, std::string input_file){
     FILE *f;
     char s[MAXLEN];
     Variables::output_file.open(output_file);
-    if ((f = fopen(input_file.c_str(), "r")) != NULL) {
+    f = fopen(input_file.c_str(), "r");
+    if (f != NULL) {
 
         for (int y = 0; y < 62; y++) {
             Variables::pole.push_back({});
@@ -277,14 +279,19 @@ void start(std::string output_file, std::string input_file){
         if (col == 60) {
             std::cout << "Finding solutions . . .\n";
             findSolutions(0);
-            std::cout << "Writting in file . . .\n";
+            std::cout << "Finish . . .\n"
+                         "Result in " << output_file << std::endl;
         } else {
             std::cout << "Square of rectangle != 60\n";
         }
 
     } else {
-        std::cout << "File is Null";
+        std::cout << "Input file is not opened";
     }
+
+    if(!Variables::output_file.tellp())
+        Variables::output_file << "Решений нет" << std::endl;
+
     Variables::output_file.close();
     return;
 }
