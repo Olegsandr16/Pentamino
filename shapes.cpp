@@ -2,9 +2,8 @@
 
 /**
  * @file pentamino.h
- * @brief Файл с инициализацией переменных
+ * @brief Файл с инициализацией переменных класса Variables
  */
-
 
 int Variables::solution = 0;
 int Variables::width;

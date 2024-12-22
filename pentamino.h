@@ -15,8 +15,6 @@
  * @param x координата по x
  * @param y координата по y
  */
-
-
 typedef struct TPoint {
     int x;
     int y;
